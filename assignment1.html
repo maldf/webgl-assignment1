@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+<title>Assignment 1: Tessellate and Twist</title>
+
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+uniform float theta;
+
+void
+main()
+{
+    float angle = length(vPosition) * theta;
+    // TODO: use matrix multiplication for rotation
+    float x = vPosition.x * cos(angle) - vPosition.y * sin(angle);
+    float y = vPosition.x * sin(angle) + vPosition.y * cos(angle);
+    gl_Position = vec4(x, y, 0, 1);
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+void
+main()
+{
+    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="assignment1.js"></script>
+</head>   
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+
+</br>
+<table>
+<tr>
+    <td><label for="div-slider">Subdivide</label></td>
+    <td><input id="div-slider" type="range" min=1 max=7 value=5 step=1></input></td>
+    <td><output for="div-slider" id="div-show">5</output></td>
+</tr>
+<tr>
+    <td><label for="theta-slider">Rotate</label></td>
+    <td><input id="theta-slider" type="range" min=0 max=720 value=0 step=1></input></td>
+    <td><output for="theta-slider" id="theta-show">0&deg;</output></td>
+</tr>
+<tr>
+    <td>Fill</td>
+    <td>
+        <select id="fill-select">
+            <option value="solid">Solid</option>
+            <option value="outline" selected>Outline</option>
+        </select>
+    </td>       
+</tr>
+<tr>
+    <td>Shape</td>
+    <td>
+        <select id="shape-select">
+            <option value="triangle" selected>Triangle</option>
+            <option value="rectangle">Rectangle</option>
+            <option value="hourglass">Hourglass</option>
+        </select>
+    </td>       
+</tr>
+</table>
+
+
+</body>
+</html>
