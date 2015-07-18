@@ -19,11 +19,9 @@ window.onload = function init()
         alert("WebGL isn't available"); 
     }
 
-    //
     //  Configure WebGL
-    //
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clearColor(0.8, 0.8, 0.8, 1.0);
 
     //  Load shaders and initialize attribute buffers
 
@@ -31,7 +29,6 @@ window.onload = function init()
     gl.useProgram(program);
 
     // Load the data into the GPU
-
     var bufferId = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
 
@@ -55,32 +52,36 @@ window.onload = function init()
 
 function triangle(a, b, c)
 {
-    if (fillSolid)
+    if (fillSolid) {
+        // draw triangle
         points.push(a, b, c);
-    else
+    } else {
+        // draw outline of triangle as 3 lines
         points.push(a, b, b, c, c, a);
+    }
 }
 
 function create_vertexes() 
 {
     // create shape based on selection
+    // ensure triangle is symmetric around centre of rotation
     var triangle = [
-        vec2(-0.5, -0.5),
-        vec2( 0, 0.5),
-        vec2( 0.5, -0.5)
+        vec2(0.9 * Math.cos((7 / 6) * Math.PI), 0.9 * Math.sin((7 / 6) * Math.PI)),     // 210deg from origin on unit circle
+        vec2( 0, 0.9),                                                                  // 90 deg from origin
+        vec2(0.9 * Math.cos((11 / 6) * Math.PI), 0.9 * Math.sin((11 / 6) * Math.PI)),   // 330deg from origin on unit circle
     ];
     var rectangle = [
-        vec2(-0.5, -0.3),
-        vec2(-0.5, 0.3),
-        vec2( 0.5, 0.3),
-        vec2( 0.5, -0.3)
+        vec2(-0.9, -0.4),
+        vec2(-0.9, 0.4),
+        vec2( 0.9, 0.4),
+        vec2( 0.9, -0.4)
     ];
     var hourglass = [
-        vec2(-0.2, -0.5),
-        vec2( 0.2, -0.5),
+        vec2(-0.4, -0.9),
+        vec2( 0.4, -0.9),
         vec2( 0.0,  0.0),
-        vec2(-0.2,  0.5),
-        vec2( 0.2,  0.5),
+        vec2(-0.4,  0.9),
+        vec2( 0.4,  0.9),
         vec2( 0.0,  0.0),
     ];
 
@@ -110,7 +111,7 @@ function subdiv_change()
 function theta_change()
 {
     document.getElementById("theta-show").value = this.value + '\u00B0';
-    theta = (this.value / 360) * 2 * Math.PI;
+    theta = 2 * Math.PI * (this.value / 360);
     gl.uniform1f(thetaPos, theta);
     render();
 };
@@ -130,9 +131,7 @@ function shape_change()
 
 function divideTriangle(a, b, c, count)
 {
-
     // check for end of recursion
-
     if (count === 0) {
         triangle(a, b, c);
     } else {
@@ -153,8 +152,9 @@ function divideTriangle(a, b, c, count)
 function render()
 {
     gl.clear(gl.COLOR_BUFFER_BIT);
-    if (fillSolid)
+    if (fillSolid) {
         gl.drawArrays(gl.TRIANGLES, 0, points.length);
-    else
+    } else {
         gl.drawArrays(gl.LINES, 0, points.length);
+    }
 }
