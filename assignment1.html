@@ -13,10 +13,10 @@ void
 main()
 {
     float angle = length(vPosition) * theta;
-    // TODO: use matrix multiplication for rotation
-    float x = vPosition.x * cos(angle) - vPosition.y * sin(angle);
-    float y = vPosition.x * sin(angle) + vPosition.y * cos(angle);
-    gl_Position = vec4(x, y, 0, 1);
+    gl_Position.x = vPosition.x * cos(angle) - vPosition.y * sin(angle);
+    gl_Position.y = vPosition.x * sin(angle) + vPosition.y * cos(angle);
+    gl_Position.z = 0.0;
+    gl_Position.w = 1.0;
 }
 </script>
 
@@ -26,7 +26,7 @@ precision mediump float;
 void
 main()
 {
-    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+    gl_FragColor = vec4(0.2, 0.2, 1.0, 1.0);
 }
 </script>
 
@@ -37,36 +37,35 @@ main()
 </head>   
 
 <body>
-<canvas id="gl-canvas" width="512" height="512">
+<canvas id="gl-canvas" width="512" height="512" style="border:1px black solid">
 Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
-
 
 </br>
 <table>
 <tr>
-    <td><label for="div-slider">Subdivide</label></td>
-    <td><input id="div-slider" type="range" min=1 max=7 value=5 step=1></input></td>
-    <td><output for="div-slider" id="div-show">5</output></td>
+    <td><label>Subdivide</label></td>
+    <td><input id="div-slider" type="range" min=1 max=7 value=5 step=1 style="width:375px"></input></td>
+    <td><output id="div-show">5</output></td>
 </tr>
 <tr>
-    <td><label for="theta-slider">Rotate</label></td>
-    <td><input id="theta-slider" type="range" min=0 max=720 value=0 step=1></input></td>
-    <td><output for="theta-slider" id="theta-show">0&deg;</output></td>
+    <td><label>Rotate</label></td>
+    <td><input id="theta-slider" type="range" min=-360 max=360 value=0 step=1 style="width:375px"></input></td>
+    <td><output id="theta-show">0&deg;</output></td>
 </tr>
 <tr>
     <td>Fill</td>
     <td>
-        <select id="fill-select">
-            <option value="solid">Solid</option>
+        <select id="fill-select" size="2" data-default="outline">>
             <option value="outline" selected>Outline</option>
+            <option value="solid">Solid</option>
         </select>
     </td>       
 </tr>
 <tr>
     <td>Shape</td>
     <td>
-        <select id="shape-select">
+        <select id="shape-select" size="3" data-default="triangle">>
             <option value="triangle" selected>Triangle</option>
             <option value="rectangle">Rectangle</option>
             <option value="hourglass">Hourglass</option>

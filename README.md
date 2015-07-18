@@ -1,2 +1,2 @@
-# webgl-assignment1
+# webgl assignment1
 Tested with Firefox and Chrome.
